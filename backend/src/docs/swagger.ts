@@ -38,7 +38,7 @@ const swaggerSpec = swaggerJsdoc({
   },
 
   apis: [
-    "./src/modules/**/*.ts",
+    "./src/docs/swagger/*.ts",
   ],
 });
 
