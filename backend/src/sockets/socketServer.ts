@@ -17,12 +17,33 @@ export const initializeSocket = (
       `Socket Connected: ${socket.id}`,
     );
 
+    socket.on(
+        "join",
+        (userId: string) => {
+          socket.join(userId);
+
+          console.log(
+            `User ${userId} joined room`,
+          );
+        },
+      );
+
     socket.on("disconnect", () => {
       console.log(
         `Socket Disconnected: ${socket.id}`,
       );
     });
   });
+
+  return io;
+};
+
+export const getIO = () => {
+  if (!io) {
+    throw new Error(
+      "Socket.IO not initialized",
+    );
+  }
 
   return io;
 };
