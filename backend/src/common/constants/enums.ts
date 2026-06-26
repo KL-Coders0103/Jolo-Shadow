@@ -22,3 +22,18 @@ export enum AuthProvider {
   LOCAL = "LOCAL",
   GOOGLE = "GOOGLE",
 }
+
+export enum ProjectStatus {
+  PLANNING = "PLANNING",
+  ACTIVE = "ACTIVE",
+  ON_HOLD = "ON_HOLD",
+  COMPLETED = "COMPLETED",
+  CANCELLED = "CANCELLED",
+}
+
+export enum ProjectPriority {
+  LOW = "LOW",
+  MEDIUM = "MEDIUM",
+  HIGH = "HIGH",
+  CRITICAL = "CRITICAL",
+}
