@@ -5,6 +5,7 @@ import employeeRoutes from "../modules/employee/employeeRoutes";
 import teamRoutes from "../modules/team/teamRoutes";
 import projectRoutes from "../modules/project/projectRoutes";
 import taskRoutes from "../modules/task/taskRoutes";
+import uploadRoutes from "../modules/upload/uploadRoutes";
 
 const router = Router();
 
@@ -20,5 +21,6 @@ router.use("/employees", employeeRoutes);
 router.use("/teams", teamRoutes);
 router.use("/projects", projectRoutes);
 router.use("/tasks", taskRoutes);
+router.use("/uploads", uploadRoutes);
 
 export default router;

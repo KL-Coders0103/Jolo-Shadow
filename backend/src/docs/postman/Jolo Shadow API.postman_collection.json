@@ -1566,6 +1566,376 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "Uploads",
+      "item": [
+        {
+          "name": "Upload Single File",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "if (response.data?._id) {\r",
+                  "    pm.environment.set(\r",
+                  "        \"fileId\",\r",
+                  "        response.data._id\r",
+                  "    );\r",
+                  "}\r",
+                  "\r",
+                  "if (response.data?.url) {\r",
+                  "    pm.environment.set(\r",
+                  "        \"fileUrl\",\r",
+                  "        response.data.url\r",
+                  "    );\r",
+                  "}\r",
+                  "\r",
+                  "pm.test(\r",
+                  "    \"Single file uploaded\",\r",
+                  "    function () {\r",
+                  "        pm.response.to.have.status(201);\r",
+                  "    }\r",
+                  ");"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "uuid": "bc7a6220-8d0f-49a5-9537-eaa64d91a6a7",
+                  "src": "/C:/Users/loves/OneDrive/Pictures/Personal/lavi/IMG_20220927_010539.jpg"
+                },
+                {
+                  "key": "module",
+                  "value": "task",
+                  "type": "text",
+                  "uuid": "c745a2a5-fcc4-4193-bea1-652be6a929b8"
+                },
+                {
+                  "key": "entityId",
+                  "value": "{{taskId}}",
+                  "type": "text",
+                  "uuid": "9c440f48-1108-468c-a724-06119f80197b"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/uploads/single",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "uploads",
+                "single"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Multiple Files",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "files",
+                  "type": "file",
+                  "uuid": "ff2a3a85-fb0c-48d3-81a9-77230751d607",
+                  "src": "/C:/Users/loves/OneDrive/Pictures/Personal/lavi/IMG-20250128-WA0036.jpg"
+                },
+                {
+                  "key": "files",
+                  "type": "file",
+                  "uuid": "2ae48ea1-c779-45ef-9062-301752a5cb87",
+                  "src": "/C:/Users/loves/OneDrive/Pictures/Personal/lavi/IMG-20240319-WA0023.jpg"
+                },
+                {
+                  "key": "files",
+                  "type": "file",
+                  "uuid": "2470a073-49d4-4b21-8bbc-58da156cbcce",
+                  "src": "/C:/Users/loves/OneDrive/Pictures/Personal/lavi/IMG-20231024-WA0005.jpg"
+                },
+                {
+                  "key": "module",
+                  "value": "project",
+                  "type": "text",
+                  "uuid": "b00b9139-bffb-45ca-935f-3f8a423b2596"
+                },
+                {
+                  "key": "entityId",
+                  "value": "{{projectId}}",
+                  "type": "text",
+                  "uuid": "b1672cbd-1406-4b4c-95bb-ec634cd25bab"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/uploads/multiple",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "uploads",
+                "multiple"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Files",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/uploads",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "uploads"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete file",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/uploads/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "uploads",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{fileId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Avatar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "if (response.data?._id) {\r",
+                  "    pm.environment.set(\r",
+                  "        \"userId\",\r",
+                  "        response.data.entityId\r",
+                  "    );\r",
+                  "}\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "uuid": "2eb138f0-f7a2-46c6-8e76-39d19e08361a",
+                  "src": "/C:/Users/loves/OneDrive/Pictures/Personal/lavi/20240823_1717546.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/uploads/avatar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "uploads",
+                "avatar"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Task Attachment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "uuid": "89894fc2-7efe-455f-8f23-741858ff5e5b",
+                  "src": "/C:/Users/loves/OneDrive/Pictures/Personal/lavi/lavi 3.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/uploads/task/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "uploads",
+                "task",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{taskId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Project Document",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "uuid": "75e63c15-7023-4c35-8e08-5e05de7a244a",
+                  "src": "/C:/Users/loves/OneDrive/Pictures/Personal/lavi/IMG_20240126_214746_863.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/uploads/project/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "uploads",
+                "project",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{projectId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Files By Module",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/uploads/module/avatar/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "uploads",
+                "module",
+                "avatar",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{userId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
     }
   ]
 }
