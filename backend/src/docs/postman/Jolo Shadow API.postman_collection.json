@@ -438,6 +438,30 @@
         },
         {
           "name": "Accept Invitation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response =\r",
+                  "  pm.response.json();\r",
+                  "\r",
+                  "if (\r",
+                  "  response.data?._id\r",
+                  ") {\r",
+                  "\r",
+                  "  pm.environment.set(\r",
+                  "    \"employeeId\",\r",
+                  "    response.data._id,\r",
+                  "  );\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [],
@@ -470,18 +494,7 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "const response =\r",
-                  "  pm.response.json();\r",
-                  "\r",
-                  "if (\r",
-                  "  response.data?._id\r",
-                  ") {\r",
-                  "\r",
-                  "  pm.environment.set(\r",
-                  "    \"employeeId\",\r",
-                  "    response.data._id,\r",
-                  "  );\r",
-                  "}"
+                  ""
                 ],
                 "type": "text/javascript",
                 "packages": {},
@@ -491,7 +504,13 @@
           ],
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/employees",
               "host": [
@@ -1165,6 +1184,381 @@
                 {
                   "key": "id",
                   "value": "{{projectId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "Create Task",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response.json();\r",
+                  "\r",
+                  "if (response.data?._id) {\r",
+                  "    pm.environment.set(\r",
+                  "        \"taskId\",\r",
+                  "        response.data._id\r",
+                  "    );\r",
+                  "}\r",
+                  "\r",
+                  "pm.test(\r",
+                  "    \"Task created successfully\",\r",
+                  "    function () {\r",
+                  "        pm.response.to.have.status(201);\r",
+                  "    }\r",
+                  ");"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"Build Authentication Module\",\r\n  \"description\": \"Implement JWT authentication with refresh tokens\",\r\n  \"projectId\": \"{{projectId}}\",\r\n  \"assignedTo\": \"{{employeeId}}\",\r\n  \"priority\": \"HIGH\",\r\n  \"dueDate\": \"2026-08-10\",\r\n  \"estimatedHours\": 12\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tasks",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tasks"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Tasks",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tasks",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tasks"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Task By Id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tasks/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tasks",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{taskId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Task",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"status\": \"IN_PROGRESS\",\r\n  \"progress\": 35,\r\n  \"priority\": \"CRITICAL\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tasks/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tasks",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{taskId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Task",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tasks/search?assignedTo={{employeeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tasks",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "assignedTo",
+                  "value": "{{employeeId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add Comment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"comment\": \"Authentication module implementation started.\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tasks/:id/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tasks",
+                ":id",
+                "comments"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{taskId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Comments",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"comment\": \"Authentication module implementation started.\"\r\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tasks/:id/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tasks",
+                ":id",
+                "comments"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{taskId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Log Time",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"hours\": 3,\r\n  \"description\": \"Implemented login API.\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tasks/:id/time-logs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tasks",
+                ":id",
+                "time-logs"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{taskId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Logs Time",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"hours\": 3,\r\n  \"description\": \"Implemented login API.\"\r\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tasks/:id/time-logs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tasks",
+                ":id",
+                "time-logs"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{taskId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Task",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tasks/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tasks",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{taskId}}"
                 }
               ]
             }
