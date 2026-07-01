@@ -29,6 +29,12 @@ export interface IUser extends Document {
   comparePassword(
     password: string,
   ): Promise<boolean>;
+
+  leaveBalance: {
+  casual: number;
+  sick: number;
+  annual: number;
+};
 }
 
 export interface ICompany extends Document {

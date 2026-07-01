@@ -63,3 +63,45 @@ export enum NotificationType {
   FILE_UPLOADED = "FILE_UPLOADED",
   SYSTEM = "SYSTEM",
 }
+
+export enum AttendanceStatus {
+  PRESENT = "PRESENT",
+
+  ABSENT = "ABSENT",
+
+  LATE = "LATE",
+
+  HALF_DAY = "HALF_DAY",
+
+  ON_LEAVE = "ON_LEAVE",
+}
+
+export enum LeaveStatus {
+  PENDING = "PENDING",
+
+  APPROVED = "APPROVED",
+
+  REJECTED = "REJECTED",
+
+  CANCELLED = "CANCELLED",
+}
+
+export enum LeaveType {
+  CASUAL = "CASUAL",
+
+  SICK = "SICK",
+
+  ANNUAL = "ANNUAL",
+
+  MATERNITY = "MATERNITY",
+
+  PATERNITY = "PATERNITY",
+
+  UNPAID = "UNPAID",
+}
+
+export enum WorkMode {
+  OFFICE = "OFFICE",
+  REMOTE = "REMOTE",
+  HYBRID = "HYBRID",
+}

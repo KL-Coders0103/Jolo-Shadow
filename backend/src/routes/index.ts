@@ -7,6 +7,8 @@ import projectRoutes from "../modules/project/projectRoutes";
 import taskRoutes from "../modules/task/taskRoutes";
 import uploadRoutes from "../modules/upload/uploadRoutes";
 import notificationRoutes from "../modules/notification/notificationRoutes";
+import attendanceRoutes from "../modules/attendance/attendanceRoutes";
+import leaveRoutes from "../modules/leave/leaveRoutes";
 
 const router = Router();
 
@@ -24,5 +26,7 @@ router.use("/projects", projectRoutes);
 router.use("/tasks", taskRoutes);
 router.use("/uploads", uploadRoutes);
 router.use("/notifications", notificationRoutes);
+router.use("/attendance", attendanceRoutes);
+router.use("/leaves", leaveRoutes);
 
 export default router;

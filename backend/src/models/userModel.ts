@@ -69,6 +69,24 @@ const userSchema = new Schema<IUser>(
     lastLoginAt: Date,
 
     deletedAt: Date,
+
+    leaveBalance: {
+
+      casual: {
+        type: Number,
+        default: 12,
+      },
+
+      sick: {
+        type: Number,
+        default: 10,
+      },
+
+      annual: {
+        type: Number,
+        default: 20,
+      },
+    },
   },
   baseSchemaOptions,
 );
