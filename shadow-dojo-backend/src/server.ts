@@ -5,6 +5,9 @@ import helmet from 'helmet';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './config/swagger';
 import authRoutes from './routes/authRoutes';
+import departmentRoutes from './routes/departmentRoutes';
+import employeeRoutes from './routes/employeeRoutes';
+import teamRoutes from './routes/teamRoutes';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,6 +22,9 @@ app.get('/health', (req: Request, res: Response) => {
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/departments', departmentRoutes);
+app.use('/api/v1/teams', teamRoutes);
+app.use('/api/v1/employees', employeeRoutes);
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error('Unhandled Error:', err);

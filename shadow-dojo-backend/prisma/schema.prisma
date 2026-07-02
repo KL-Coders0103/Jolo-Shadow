@@ -37,6 +37,13 @@ enum UserStatus {
   DEACTIVATED
 }
 
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  EXPIRED
+  REVOKED
+}
+
 // --- MODELS ---
 
 model Company {
@@ -51,11 +58,16 @@ model Company {
 
   // Relations
   users            User[]
+  departments      Department[]
+  teams            Team[]
+  invitations      Invitation[]
 }
 
 model User {
   id           String     @id @default(uuid())
   companyId    String
+  departmentId String?    // NEW: Employee's department
+  teamId       String?    // NEW: Employee's team
   name         String
   email        String     @unique
   passwordHash String
@@ -66,6 +78,10 @@ model User {
 
   // Relations
   company             Company               @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  department          Department?           @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  team                Team?                 @relation("TeamMembers", fields: [teamId], references: [id], onDelete: SetNull)
+  ledTeam             Team?                 @relation("TeamLead") // A user can be a lead of one team
+  
   refreshTokens       RefreshToken[]
   verificationTokens  VerificationToken[]
   passwordResetTokens PasswordResetToken[]
@@ -73,6 +89,8 @@ model User {
   auditLogs           AuditLog[]
 
   @@index([companyId])
+  @@index([departmentId])
+  @@index([teamId])
 }
 
 model RefreshToken {
@@ -143,4 +161,55 @@ model AuditLog {
 
   @@index([userId])
   @@index([action])
+}
+
+model Department {
+  id        String   @id @default(uuid())
+  companyId String
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  teams     Team[]
+  users     User[]
+
+  @@index([companyId])
+}
+
+model Team {
+  id           String      @id @default(uuid())
+  companyId    String
+  departmentId String?
+  name         String
+  leadId       String?     @unique // Ensures a user is only lead of one team (optional, can be changed if needed)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  // Relations
+  company      Company     @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  department   Department? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  lead         User?       @relation("TeamLead", fields: [leadId], references: [id], onDelete: SetNull)
+  members      User[]      @relation("TeamMembers")
+
+  @@index([companyId])
+  @@index([departmentId])
+}
+
+model Invitation {
+  id        String           @id @default(uuid())
+  companyId String
+  email     String
+  role      UserRole         @default(EMPLOYEE)
+  token     String           @unique
+  status    InvitationStatus @default(PENDING)
+  expiresAt DateTime
+  createdAt DateTime         @default(now())
+
+  // Relations
+  company   Company          @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId])
+  @@index([email])
 }
