@@ -169,6 +169,26 @@ class UploadService {
       entityId,
     });
   }
+
+  async uploadPdf(buffer: Buffer): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        {
+          folder: "hrms/payslips",
+          resource_type: "raw",
+          public_id: `payslip_${Date.now()}`,
+        }, (error, result) => {
+          if (error) {
+            reject(error);
+            return;
+          }
+          resolve(result!.secure_url);
+        }
+      );
+      stream.end(buffer);
+    }
+    );
+  }
 }
 
 export const uploadService =

@@ -22,6 +22,8 @@ export interface IUser extends Document {
 
   isActive: boolean;
 
+  departmentId?: Types.ObjectId;
+
   lastLoginAt?: Date;
 
   deletedAt?: Date;

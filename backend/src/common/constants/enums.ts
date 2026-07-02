@@ -105,3 +105,41 @@ export enum WorkMode {
   REMOTE = "REMOTE",
   HYBRID = "HYBRID",
 }
+
+export enum PayrollStatus {
+  GENERATED = "GENERATED",
+
+  APPROVED = "APPROVED",
+
+  PAID = "PAID",
+
+  CANCELLED = "CANCELLED",
+}
+
+export enum BonusType {
+  FESTIVAL = "FESTIVAL",
+
+  PERFORMANCE = "PERFORMANCE",
+
+  REFERRAL = "REFERRAL",
+
+  CUSTOM = "CUSTOM",
+}
+
+export enum DeductionType {
+  PF = "PF",
+
+  ESI = "ESI",
+
+  PROFESSIONAL_TAX = "PROFESSIONAL_TAX",
+
+  INCOME_TAX = "INCOME_TAX",
+
+  PENALTY = "PENALTY",
+
+  LOAN = "LOAN",
+
+  SALARY_ADVANCE = "SALARY_ADVANCE",
+
+  CUSTOM = "CUSTOM",
+}

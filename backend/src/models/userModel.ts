@@ -66,6 +66,11 @@ const userSchema = new Schema<IUser>(
       default: true,
     },
 
+    departmentId: {
+      type: Schema.Types.ObjectId,
+      ref: "Department",
+    },
+
     lastLoginAt: Date,
 
     deletedAt: Date,

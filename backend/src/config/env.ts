@@ -11,6 +11,13 @@ interface EnvConfig {
   CLOUDINARY_CLOUD_NAME: string;
   CLOUDINARY_API_KEY: string;
   CLOUDINARY_API_SECRET: string;
+
+  SMTP_HOST: string;
+  SMTP_PORT: number;
+  SMTP_SECURE: boolean;
+  SMTP_USER: string;
+  SMTP_PASS: string;
+  SMTP_FROM: string;
 }
 
 export const env: EnvConfig = {
@@ -36,6 +43,19 @@ export const env: EnvConfig = {
 
   CLOUDINARY_API_SECRET:
     process.env.CLOUDINARY_API_SECRET || "",
+
+  SMTP_HOST: process.env.SMTP_HOST || "",
+
+  SMTP_PORT: Number(process.env.SMTP_PORT) || 587,
+
+  SMTP_SECURE:
+    process.env.SMTP_SECURE === "true",
+
+  SMTP_USER: process.env.SMTP_USER || "",
+
+  SMTP_PASS: process.env.SMTP_PASS || "",
+
+  SMTP_FROM: process.env.SMTP_FROM || "",
 };
 
 if (!env.MONGO_URI) {
