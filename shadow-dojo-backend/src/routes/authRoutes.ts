@@ -1,0 +1,16 @@
+import { Router } from 'express';
+import { AuthController } from '../controllers/authController';
+import { validate } from '../middlewares/validateMiddleware';
+import { registerSchema, loginSchema, refreshTokenSchema } from '../validations/authValidation';
+
+const router = Router();
+
+router.post('/register', validate(registerSchema), AuthController.register);
+
+router.post('/login', validate(loginSchema), AuthController.login);
+
+router.post('/refresh', validate(refreshTokenSchema), AuthController.refresh);
+
+router.post('/logout', validate(refreshTokenSchema), AuthController.logout);
+
+export default router;
