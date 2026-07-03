@@ -359,6 +359,51 @@ const options: swaggerJsdoc.Options = {
           responses: { 200: { description: 'AI Response received' } }
         }
       },
+      '/billing/checkout': {
+        post: {
+          summary: 'Generate a Stripe Checkout Session URL',
+          tags: ['Billing'],
+          security: [{ bearerAuth: [] }],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  required: ['plan'],
+                  properties: {
+                    plan: { type: 'string', enum: ['STARTER', 'PRO', 'ENTERPRISE'] }
+                  }
+                }
+              }
+            }
+          },
+          responses: {
+            200: { description: 'Checkout URL generated successfully' },
+            400: { description: 'Invalid plan selected' },
+            403: { description: 'Forbidden (Requires COMPANY_ADMIN)' }
+          }
+        }
+      },
+      '/billing/webhook': {
+        post: {
+          summary: 'Stripe Webhook Receiver (Internal Use Only)',
+          tags: ['Billing'],
+          description: 'This endpoint receives cryptographically signed webhooks directly from Stripe. Do not call this manually.',
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: { type: 'object', description: 'Raw Stripe Event Object' }
+              }
+            }
+          },
+          responses: {
+            200: { description: 'Webhook acknowledged' },
+            400: { description: 'Webhook signature verification failed' }
+          }
+        }
+      },
     },
   },
   apis: [],

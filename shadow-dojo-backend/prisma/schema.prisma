@@ -12,10 +12,20 @@ datasource db {
 // --- ENUMS ---
 
 enum SubscriptionPlan {
-  TRIAL
-  BASIC
+  FREE
+  STARTER
   PRO
   ENTERPRISE
+}
+
+enum SubscriptionStatus {
+  TRIALING
+  ACTIVE
+  CANCELED
+  INCOMPLETE
+  INCOMPLETE_EXPIRED
+  PAST_DUE
+  UNPAID
 }
 
 enum CompanyStatus {
@@ -73,7 +83,7 @@ model Company {
   id               String           @id @default(uuid())
   name             String
   industry         String?
-  subscriptionPlan SubscriptionPlan @default(TRIAL)
+  subscriptionPlan SubscriptionPlan @default(FREE)
   logoUrl          String?
   status           CompanyStatus    @default(ACTIVE)
   createdAt        DateTime         @default(now())
@@ -86,6 +96,7 @@ model Company {
   invitations      Invitation[]
   knowledgeDocs    KnowledgeDocument[]
   chatSessions     ChatSession[]
+  subscription     Subscription?
 }
 
 model User {
@@ -304,4 +315,27 @@ model ChatMessage {
 
   @@index([sessionId])
   @@index([createdAt]) // Useful for ordering messages chronologically
+}
+
+model Subscription {
+  id                   String             @id @default(uuid())
+  companyId            String             @unique
+  stripeCustomerId     String?            @unique
+  stripeSubscriptionId String?            @unique
+  plan                 SubscriptionPlan   @default(FREE)
+  status               SubscriptionStatus @default(TRIALING)
+  currentPeriodStart   DateTime           @default(now())
+  currentPeriodEnd     DateTime           @default(now())
+  cancelAtPeriodEnd    Boolean            @default(false)
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  // Usage tracking for quota limits
+  apiCallsCount        Int                @default(0)
+  storageUsedBytes     BigInt             @default(0)
+
+  // Relations
+  company              Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([stripeCustomerId])
 }

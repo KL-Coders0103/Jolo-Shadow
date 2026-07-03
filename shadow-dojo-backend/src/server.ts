@@ -10,13 +10,18 @@ import employeeRoutes from './routes/employeeRoutes';
 import teamRoutes from './routes/teamRoutes';
 import knowledgeRoutes from './routes/KnowledgeRoutes';
 import chatRoutes from './routes/chatRoutes';
+import billingRoutes from './routes/billingRoutes';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(helmet());
 app.use(cors());
+
+app.use('/api/v1/billing', billingRoutes);
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({ status: 'success', message: 'Shadow-Dojo API is healthy' });
