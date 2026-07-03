@@ -1,11 +1,12 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider        = "prisma-client"
+  output          = "../src/generated/prisma"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
-  // The url field has been removed
+  provider   = "postgresql"
+  extensions = [vector] 
 }
 
 // --- ENUMS ---
@@ -44,6 +45,22 @@ enum InvitationStatus {
   REVOKED
 }
 
+enum DocumentType {
+  PDF
+  DOCX
+  TXT
+  FAQ
+  SOP
+}
+
+enum DocumentStatus {
+  UPLOADING
+  PROCESSING
+  ACTIVE
+  ARCHIVED
+  FAILED
+}
+
 // --- MODELS ---
 
 model Company {
@@ -61,6 +78,7 @@ model Company {
   departments      Department[]
   teams            Team[]
   invitations      Invitation[]
+  knowledgeDocs    KnowledgeDocument[]
 }
 
 model User {
@@ -212,4 +230,39 @@ model Invitation {
 
   @@index([companyId])
   @@index([email])
+}
+
+model KnowledgeDocument {
+  id          String         @id @default(uuid())
+  companyId   String
+  title       String
+  type        DocumentType
+  status      DocumentStatus @default(PROCESSING)
+  fileUrl     String?        // URL to S3/Cloud Storage
+  tags        String[]
+  category    String?
+  version     Int            @default(1)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  // Relations
+  company     Company          @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  chunks      KnowledgeChunk[]
+
+  @@index([companyId])
+  @@index([status])
+}
+
+model KnowledgeChunk {
+  id           String   @id @default(uuid())
+  documentId   String
+  content      String   // The extracted text chunk
+  embedding    Unsupported("vector(1536)")? // The AI vector representation
+  chunkIndex   Int      // To keep track of text order
+  createdAt    DateTime @default(now())
+
+  // Relations
+  document     KnowledgeDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@index([documentId])
 }

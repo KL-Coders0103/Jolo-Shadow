@@ -258,6 +258,60 @@ const options: swaggerJsdoc.Options = {
           },
           responses: { 200: { description: 'Employee updated' } }
         }
+      },
+      '/knowledge/upload': {
+        post: {
+          summary: 'Upload and vectorize a company document (PDF, TXT)',
+          tags: ['Knowledge Base'],
+          security: [{ bearerAuth: [] }],
+          requestBody: {
+            required: true,
+            content: {
+              'multipart/form-data': {
+                schema: {
+                  type: 'object',
+                  required: ['title', 'type', 'file'],
+                  properties: {
+                    title: { type: 'string', example: 'Employee Handbook 2026' },
+                    type: { type: 'string', enum: ['PDF', 'DOCX', 'TXT', 'FAQ', 'SOP'] },
+                    category: { type: 'string', example: 'HR' },
+                    file: { type: 'string', format: 'binary', description: 'The document file to upload' }
+                  }
+                }
+              }
+            }
+          },
+          responses: {
+            202: { description: 'Document is processing and vectorizing' },
+            400: { description: 'No file uploaded or validation failed' },
+            403: { description: 'Forbidden (Requires Admin or Manager)' }
+          }
+        }
+      },
+      '/knowledge/search': {
+        post: {
+          summary: 'Perform semantic AI search across company documents',
+          tags: ['Knowledge Base'],
+          security: [{ bearerAuth: [] }],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  required: ['query'],
+                  properties: {
+                    query: { type: 'string', example: 'What is our remote work policy?' },
+                    limit: { type: 'integer', default: 5 }
+                  }
+                }
+              }
+            }
+          },
+          responses: {
+            200: { description: 'Semantic search results retrieved successfully' }
+          }
+        }
       }
     },
   },

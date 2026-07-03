@@ -8,6 +8,7 @@ import authRoutes from './routes/authRoutes';
 import departmentRoutes from './routes/departmentRoutes';
 import employeeRoutes from './routes/employeeRoutes';
 import teamRoutes from './routes/teamRoutes';
+import knowledgeRoutes from './routes/KnowledgeRoutes';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -25,6 +26,7 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/departments', departmentRoutes);
 app.use('/api/v1/teams', teamRoutes);
 app.use('/api/v1/employees', employeeRoutes);
+app.use('/api/v1/knowledge', knowledgeRoutes);
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error('Unhandled Error:', err);
