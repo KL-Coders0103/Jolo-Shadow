@@ -61,6 +61,12 @@ enum DocumentStatus {
   FAILED
 }
 
+enum RoleType {
+  USER
+  MODEL
+  SYSTEM
+}
+
 // --- MODELS ---
 
 model Company {
@@ -79,6 +85,7 @@ model Company {
   teams            Team[]
   invitations      Invitation[]
   knowledgeDocs    KnowledgeDocument[]
+  chatSessions     ChatSession[]
 }
 
 model User {
@@ -105,6 +112,7 @@ model User {
   passwordResetTokens PasswordResetToken[]
   sessions            Session[]
   auditLogs           AuditLog[]
+  chatSessions     ChatSession[]
 
   @@index([companyId])
   @@index([departmentId])
@@ -265,4 +273,35 @@ model KnowledgeChunk {
   document     KnowledgeDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
 
   @@index([documentId])
+}
+
+model ChatSession {
+  id        String        @id @default(uuid())
+  companyId String
+  userId    String
+  title     String        @default("New Conversation")
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  // Relations
+  company   Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  ChatMessage[]
+
+  @@index([companyId])
+  @@index([userId])
+}
+
+model ChatMessage {
+  id        String      @id @default(uuid())
+  sessionId String
+  role      RoleType
+  content   String
+  createdAt DateTime    @default(now())
+
+  // Relations
+  session   ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@index([createdAt]) // Useful for ordering messages chronologically
 }

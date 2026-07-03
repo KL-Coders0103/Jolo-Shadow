@@ -312,7 +312,53 @@ const options: swaggerJsdoc.Options = {
             200: { description: 'Semantic search results retrieved successfully' }
           }
         }
-      }
+      },
+      '/chat/sessions': {
+        post: {
+          summary: 'Start a new AI chat session',
+          tags: ['AI Copilot'],
+          security: [{ bearerAuth: [] }],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: { type: 'object', properties: { title: { type: 'string', example: 'HR Policy Questions' } } }
+              }
+            }
+          },
+          responses: { 201: { description: 'Session created' } }
+        },
+        get: {
+          summary: 'Get all user chat sessions',
+          tags: ['AI Copilot'],
+          security: [{ bearerAuth: [] }],
+          responses: { 200: { description: 'List of sessions retrieved' } }
+        }
+      },
+      '/chat/sessions/{sessionId}/messages': {
+        get: {
+          summary: 'Get messages for a specific session',
+          tags: ['AI Copilot'],
+          security: [{ bearerAuth: [] }],
+          parameters: [{ name: 'sessionId', in: 'path', required: true, schema: { type: 'string' } }],
+          responses: { 200: { description: 'Messages retrieved' } }
+        },
+        post: {
+          summary: 'Send a message to the AI Copilot',
+          tags: ['AI Copilot'],
+          security: [{ bearerAuth: [] }],
+          parameters: [{ name: 'sessionId', in: 'path', required: true, schema: { type: 'string' } }],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: { type: 'object', required: ['message'], properties: { message: { type: 'string', example: 'What is our refund policy?' } } }
+              }
+            }
+          },
+          responses: { 200: { description: 'AI Response received' } }
+        }
+      },
     },
   },
   apis: [],
